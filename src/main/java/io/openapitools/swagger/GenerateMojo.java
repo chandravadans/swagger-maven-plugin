@@ -138,11 +138,14 @@ public class GenerateMojo extends AbstractMojo {
             enrichers.forEach(enricher -> {
                 Class<?> aClass = ClassUtils.loadClass(enricher, clzLoader);
                 if (aClass == null) {
-                    throw new RuntimeException("Couldn't load enricher class " + enricher);
+                    getLog().error("Couldn't load enricher class " + enricher);
                 }
+
                 Enricher e = (Enricher) ClassUtils.createInstance(aClass);
                 if (e != null) {
-                    e.enhance(classes);
+                    e.enhance(swagger, classes);
+                } else {
+                    getLog().error("Could not create instance of enricher class, does it have a no args constructor? Failing class: " + enricher);
                 }
             });
 
