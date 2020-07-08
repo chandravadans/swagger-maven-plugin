@@ -44,6 +44,9 @@
                     <resourcePackages>
                         <resourcePackage>io.openapitools.swagger.example</resourcePackage>
                     </resourcePackages>
+                    <enrichers>
+                        <enricher>io.openapitools.swagger.example.SimpleEnricher</enricher>
+                    </enrichers>
                     <outputFormats>
                         <outputFormat>JSON</outputFormat>
                         <outputFormat>YAML</outputFormat>
