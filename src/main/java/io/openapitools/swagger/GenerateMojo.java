@@ -1,6 +1,5 @@
 package io.openapitools.swagger;
 
-import io.openapitools.swagger.config.Enricher;
 import io.openapitools.swagger.config.SwaggerConfig;
 import io.swagger.v3.jaxrs2.Reader;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -23,6 +22,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.function.BiConsumer;
 
 import static java.util.Collections.emptySet;
 
@@ -141,11 +141,12 @@ public class GenerateMojo extends AbstractMojo {
                     getLog().error("Couldn't load enricher class " + enricher);
                 }
 
-                Enricher e = (Enricher) ClassUtils.createInstance(aClass);
+                BiConsumer<OpenAPI, Set<Class<?>>> e = (BiConsumer<OpenAPI, Set<Class<?>>>) ClassUtils.createInstance(aClass);
                 if (e != null) {
-                    e.enhance(swagger, classes);
+                    e.accept(swagger, classes);
                 } else {
-                    getLog().error("Could not create instance of enricher class, does it have a no args constructor? Failing class: " + enricher);
+                    getLog().error("Could not create instance of enricher class, does it implement BiConsumer<OpenAPI, Set<Class<?>>? " +
+                                   "Failing class: " + e);
                 }
             });
 
